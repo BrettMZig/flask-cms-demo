@@ -3,7 +3,7 @@
 .editorconfig
 
 *.lnk
-
+*.db
 __pycache__/
 bbflaskenv/
 old_files/
