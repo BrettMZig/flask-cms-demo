@@ -3,3 +3,10 @@
 .editorconfig
 
 *.lnk
+
+__pycache__/
+bbflaskenv/
+old_files/
+bbflask.py
+cp-from-git
+cp-to-git

@@ -1,2 +1,0 @@
-rsync -avu "/home/brett/bbflask/" "/home/brett/git-working-dir/flask-cms-demo/"
-
