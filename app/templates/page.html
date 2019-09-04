@@ -3,7 +3,7 @@
 	<div class="container card large">
 		<h2>{{ title }}</h2>
 		{% if current_user.is_authenticated %}
-		<ul class="admin">
+		<ul class="toolbar">
 			<li><a href="{{ url_for('edit_page', page_id=id) }}">edit post</a></li> 
 			<li><a href="{{ url_for('delete_page', post_id=id) }}">delete post</a></li>
 		</ul>

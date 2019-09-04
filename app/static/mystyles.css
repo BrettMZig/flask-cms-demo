@@ -49,3 +49,10 @@ footer p { margin: 1%; }
 
 ul.admin { list-style-type: none; }
 ul.admin a { display: block; }
+
+.toolbar { list-style-type: none; margin: 2% 0 0 0; padding: 0; overflow: hidden; }
+.toolbar li { float: left; }
+.toolbar a { display: block; color: #aaa; text-align: center; text-decoration: none; 
+           font-weight: bold; padding: 5px 10px; }
+.toolbar a:visted { color: #aaa; }
+.toolbar a:hover { background-color: #aaa; color: #333; }
