@@ -10,3 +10,4 @@ old_files/
 bbflask.py
 cp-from-git
 cp-to-git
+initialize_db.py
