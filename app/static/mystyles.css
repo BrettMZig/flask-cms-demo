@@ -2,10 +2,15 @@
 * { box-sizing : border-box; }
 
 html{font-size: 16px; font-family: sans-serif; color: #777; align:center; background-color: #fff;
-     display: block;}
-
+     display: block; padding: 0;}
+body { padding: 0; margin: 0; }
+	 
 .page-wrap { width: 100%; max-width: 960px; background: #777; margin: 0 auto; 
 			 overflow: auto; }
+.full-width { width: 100%; margin: 0; padding: 1px; clear: both;
+			 overflow: auto; }			 
+.dark { background: #333; }
+.light { background: #fff; }
 
 img.banner { display: block; width: 100%; margin: 0px; padding: 0px; }	 
 img.half { width: 50%; }
@@ -21,7 +26,7 @@ nav li a { display: block; color: #aaa; text-align: center; text-decoration: non
 nav li a:hover { background-color: #aaa; color: #333; }
 
 
-footer { width: 100%; text-align: center; clear: both; padding: 1%;
+footer { width: 100%; text-align: center; padding: 1%;
          background: #333; color: #aaa; }
 footer a { color: #aaa; }
 footer a:visited { color: #aaa; }
