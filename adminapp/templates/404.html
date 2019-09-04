@@ -1,0 +1,9 @@
+{% extends "master.html" %}
+{% block content %}
+	<div class="container card">
+		<img class="float-right third" src={{ url_for('static', filename='images/off-target.png') }} >
+		<h1>Page Not Found:<h1>
+		<h2>Looks like you were a little off target.<h2>
+		<div class="clear-both"></div>
+	</div>
+{% endblock %}

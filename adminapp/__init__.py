@@ -1,1 +1,2 @@
-from app.views import app, db
+from adminapp.views import app
+from adminapp.models import db  #, User, Post

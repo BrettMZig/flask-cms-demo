@@ -6,17 +6,29 @@
 	<script src="{{  url_for('static', filename='js/wysihtml.adv_ext.js') }}"></script>
 	<link rel="stylesheet" type="text/css" href="{{  url_for('static', filename='mystyles.css') }}">
 	<link rel="shortcut icon" href="{{  url_for('static', filename='images/favicon1.png') }}" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" >
 </head>
 <body>
-	<div class="container">
-        <nav>
-            <a href="/" id="logo"><img class="banner" src={{ url_for('static', filename='images/BB_logo.jpg') }}></a>
-            <!-- <a href="/contact">Contact</a> -->
-            <!-- <a href="/news">News</a> -->
-            <a href="https://www.facebook.com/Borthwick-Ballistics-237115003848341/" target=_blank id="facebook"><img class="fb-icon" src={{ url_for('static', filename='images/facebook_icon.svg') }}></a>
+	<div class="page-wrap">
+		<img class="banner" src={{ url_for('static', filename='images/BB_logo.jpg') }}>
+        <nav>			
+			<ul>			
+				<li><a href="https://www.facebook.com/Borthwick-Ballistics-237115003848341/" target=_blank>FACEBOOK</a></li>
+				
+				{% if current_user.is_authenticated %}
+				<li><a href="/logout">LOGOUT</a></li>
+				<li><a href="/new-post">NEW&nbsp;POST</a></li>
+				{% endif %}
+
+				<li><a href="/">HOME</a></li>
+			</ul>            
         </nav>
 		{% block content %}
 		{% endblock %}
+		<footer>
+			<p>(662) 251-1832</p>
+			<p><a target="_blank" href="mailto:borthwickballistics@gmail.com">borthwickballistics@gmail.com</a></p>
+		</footer>
 	</div>
 </body>
 </html>
