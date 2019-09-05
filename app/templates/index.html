@@ -16,8 +16,17 @@
     {% for page in pages %}
     	<div class="container card">
     		<a class="larger" href="{{ url_for('view_post_by_slug', post_slug=page.slug) }}">{{ page.title | safe | truncate(150) }}</a>
+			<p class="smallest">{{ page.timestamp | formatdatetime }}</p>
     		<p>{{ page.content | safe | truncate(500) }}</p>
 		</div>
     {% endfor %}
-
+		<div class="container card">
+	{% if prev_url %}
+			<a class="float-left" href="{{ prev_url }}">Newer posts</a>
+    {% endif %}
+    {% if next_url %}
+			<a class="float-right" href="{{ next_url }}">Older posts</a>
+    {% endif %}
+			<div class="clear-both"></div>
+		</div>
 {% endblock %}

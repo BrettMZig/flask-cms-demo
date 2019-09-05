@@ -22,10 +22,17 @@ def page_not_found(e):
 # ---------------------------------------- #
 # -- No Login Required Pages ------------- #
 # ---------------------------------------- #
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
-    pages = Post.query.all()
-    return render_template('index.html', pages=pages, title="home")
+    page_num = request.args.get('page', 1, type=int)
+    pages = Post.query.order_by(Post.timestamp.desc()).paginate(
+            page_num, app.config["POSTS_PER_PAGE"], False)
+    next_url = url_for('index', page=pages.next_num) \
+        if pages.has_next else None
+    prev_url = url_for('index', page=pages.prev_num) \
+        if pages.has_prev else None
+    return render_template('index.html', pages=pages.items, title="home",
+                           next_url=next_url, prev_url=prev_url)
 
 
 @app.route('/post/<string:post_slug>')

@@ -37,9 +37,13 @@ footer p { margin: 1%; }
 
 .container{ width: 100%; display: block;}
 
+.smallest { font-size: 70%; }
+.smaller { font-size: 80%; }
+.small { font-size: 90%; }
 .large { font-size: 110%; }
 .larger { font-size: 120%; }
 .largest { font-size: 130%; }
+
 
 .card { background: #fff; margin: 0px; padding: 1%; margin: 0; margin-bottom: 1px; }
 .card a { font-weight: bold; color: #111; }

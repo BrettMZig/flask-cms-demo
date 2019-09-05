@@ -5,6 +5,15 @@ from .config import Config
 app = Flask(__name__)
 app.config.from_object(Config)
 
+
+@app.template_filter('formatdatetime')
+def format_datetime(value, format="%d %b %Y"):
+    """Format a date time to (Default): d Mon YYYY HH:MM P"""
+    if value is None:
+        return ""
+    return value.strftime(format)
+
+
 app.debug = True
 if(app.debug):
     from werkzeug.debug import DebuggedApplication
