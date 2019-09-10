@@ -1,0 +1,12 @@
+{% extends "master.html" %}
+{% block content %}
+	<div class="container card large">
+		<form method="POST">
+			{{ form.hidden_tag() }}
+			<p>{{ form.title.label }}:<br>{{ form.title }}</p>
+			<p>Content:</p>
+			{{ form.content(rows=10) }}
+			{{ form.submit }}
+		</form>
+	</div>
+{% endblock %}

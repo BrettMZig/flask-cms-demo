@@ -1,9 +1,13 @@
 from flask import Flask
+from flaskext.markdown import Markdown
 from .config import Config
 
 # Flask app
 app = Flask(__name__)
 app.config.from_object(Config)
+
+# add Markdown Capability
+md = Markdown(app)
 
 
 @app.template_filter('formatdatetime')

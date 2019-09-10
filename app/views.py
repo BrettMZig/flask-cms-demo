@@ -1,10 +1,13 @@
 from flask import render_template, redirect, request, url_for, flash
 from flask_login import LoginManager, current_user, login_user, logout_user
 from flask_login import login_required
+from flask_pagedown import PageDown
 from werkzeug.urls import url_parse
 from .main import app
 from .models import db, Post, User
-from .forms import LoginForm
+from .forms import LoginForm, NewPostForm
+
+pagedown = PageDown(app)
 
 login = LoginManager(app)
 login.login_view = 'login'  # where to go when not logged in
@@ -68,17 +71,37 @@ def login():
 # ---------------------------------------- #
 # -- Login Required Pages to View -------- #
 # ---------------------------------------- #
-@app.route('/new-post/')
+@app.route('/new-post/', methods=['GET', 'POST'])
 @login_required
 def new_page():
-    return render_template('new-page.html')
+    form = NewPostForm()
+    if form.validate_on_submit():
+        new_post = Post(title=form.title.data,
+                        content=form.content.data)
+        db.session.add(new_post)
+        db.session.commit()
+        return redirect(url_for('view_post_by_id', post_id=new_post.id))
+    if form.errors:
+        flash(form.errors)
+    return render_template('new-blog-post.html',
+                           title="New Blog Post", form=form)
 
 
-@app.route('/edit-post/<int:page_id>')
+@app.route('/edit-post/<int:page_id>', methods=['GET', 'POST'])
 def edit_page(page_id):
-    page = db.session.query(Post).filter_by(id=page_id).first()
-    return render_template('edit-post.html',
-                           id=page.id, title=page.title, content=page.content)
+    post = db.session.query(Post).filter_by(id=page_id).first()
+    form = NewPostForm(obj=post)
+    if form.validate_on_submit():
+        db.session.query(Post).filter_by(id=page_id).update(
+            {'title': form.title.data,
+             'content': form.content.data}
+            )
+        db.session.commit()
+        return redirect(url_for('view_post_by_id', post_id=post.id))
+    if form.errors:
+        flash(form.errors)
+    return render_template('new-blog-post.html',
+                           title="Edit Blog Post", form=form)
 
 
 # ---------------------------------------- #
@@ -89,29 +112,6 @@ def edit_page(page_id):
 def logout():
     logout_user()
     return redirect(url_for('index'))
-
-
-@app.route('/save-post/', methods=['POST'])
-@login_required
-def save_page():
-    page = Post(title=request.form['title'],
-                content=request.form['content'])
-    db.session.add(page)
-    db.session.commit()
-    return redirect('/post/%d' % page.id)
-
-
-@app.route('/update-post/', methods=['POST'])
-@login_required
-def update_page():
-    page_id = request.form['id']
-    title = request.form['title']
-    content = request.form['content']
-    db.session.query(Post).filter_by(id=page_id).update(
-            {'title': title, 'content': content}
-            )
-    db.session.commit()
-    return redirect('/post/'+page_id)
 
 
 @app.route('/delete-post/<int:post_id>')

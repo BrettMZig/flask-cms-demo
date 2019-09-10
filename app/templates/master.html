@@ -2,8 +2,7 @@
 <html>
 <head>
 	<title>BB:{{ title }}</title>
-	<script src="{{  url_for('static', filename='js/wysihtml.toolbar.min.js') }}"></script>
-	<script src="{{  url_for('static', filename='js/wysihtml.adv_ext.js') }}"></script>
+	{{ pagedown.include_pagedown() }}
 	<link rel="stylesheet" type="text/css" href="{{  url_for('static', filename='mystyles.css') }}">
 	<link rel="shortcut icon" href="{{  url_for('static', filename='images/favicon1.png') }}" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" >
@@ -28,6 +27,15 @@
 	</div> <!-- closes top stripe -->
 	<div class="full-width light">
 		<div class="page-wrap">
+		{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				<ul class="flashes card">
+				{% for message in messages %}
+					<li>{{ message }}</li>
+				{% endfor %}
+				</ul>
+			{% endif %}
+		{% endwith %}
 		{% block content %}
 		{% endblock %}
 		</div>

@@ -8,6 +8,6 @@
 			<li><a href="{{ url_for('delete_page', post_id=id) }}">delete post</a></li>
 		</ul>
 		{% endif %}
-		{{ content|safe }}
+		{{ content | markdown }}
 	</div>
 {% endblock %}
