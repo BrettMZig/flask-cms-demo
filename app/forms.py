@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from flask_pagedown.fields import PageDownField
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, ValidationError, EqualTo
+from .models import User
 
 
 class LoginForm(FlaskForm):
@@ -15,3 +16,16 @@ class NewPostForm(FlaskForm):
     title = StringField('Title')
     content = PageDownField('Enter Markdown Text')
     submit = SubmitField('Submit')
+
+
+class AddUserForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    password2 = PasswordField(
+        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Register')
+
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user is not None:
+            raise ValidationError('Please use a different username.')

@@ -1,13 +1,13 @@
 from flask import render_template, redirect, request, url_for, flash
 from flask_login import LoginManager, current_user, login_user, logout_user
 from flask_login import login_required
-from flask_pagedown import PageDown
+from flask_admin import Admin, AdminIndexView
+from flask_admin.contrib.sqla import ModelView
 from werkzeug.urls import url_parse
 from .main import app
 from .models import db, Post, User
-from .forms import LoginForm, NewPostForm
+from .forms import LoginForm, NewPostForm, AddUserForm
 
-pagedown = PageDown(app)
 
 login = LoginManager(app)
 login.login_view = 'login'  # where to go when not logged in
@@ -41,13 +41,15 @@ def index():
 @app.route('/post/<string:post_slug>')
 def view_post_by_slug(post_slug):
     post = Post.query.filter_by(slug=post_slug).first()
-    return render_template("page.html", title=post.title, content=post.content, id = post.id)
+    return render_template("page.html", title=post.title,
+                           content=post.content, id=post.id)
 
 
 @app.route('/post/<int:post_id>')
 def view_post_by_id(post_id):
     post = Post.query.get(post_id)
-    return render_template("page.html", title=post.title, content=post.content, id = post.id)
+    return render_template("page.html", title=post.title,
+                           content=post.content, id=post.id)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -71,6 +73,22 @@ def login():
 # ---------------------------------------- #
 # -- Login Required Pages to View -------- #
 # ---------------------------------------- #
+@app.route('/new-user/', methods=['GET', 'POST'])
+@login_required
+def new_user():
+    form = AddUserForm()
+    if form.validate_on_submit():
+        new_user = User(username=form.username.data,
+                        plain_text_password=form.password.data)
+        db.session.add(new_user)
+        db.session.commit()
+        flash("New user {} successfully added.".format(form.username.data))
+        return redirect(url_for('index'))
+    if form.errors:
+        flash(form.errors)
+    return render_template('new-user.html', title="Add New User", form=form)
+
+
 @app.route('/new-post/', methods=['GET', 'POST'])
 @login_required
 def new_page():
@@ -120,3 +138,27 @@ def delete_page(post_id):
     db.session.query(Post).filter_by(id=post_id).delete()
     db.session.commit()
     return redirect('/')
+
+
+# ---------------------------------------- #
+# -- add Admin Views --------------------- #
+# ---------------------------------------- #
+class SecuredModelView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('login'))
+
+
+class SecuredAdminIndexView(AdminIndexView):
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('login'))
+
+
+admin = Admin(app, index_view=SecuredAdminIndexView())
+admin.add_view(SecuredModelView(Post, db.session))
+admin.add_view(SecuredModelView(User, db.session))

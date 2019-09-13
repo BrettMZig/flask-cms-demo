@@ -3,3 +3,6 @@ Flask-SQLAlchemy
 Flask-Migrate
 Flask-Login
 Flask-WTF
+Flask-Markdown
+Flask-PageDown
+Flask-Admin
